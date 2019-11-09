@@ -11,8 +11,14 @@
 |
 */
 
+Route::get('/',function(){
+    return view('index');
+});
+//gambiarra
 Route::get('/categoria/delete/{id}','CategoriaController@destroy');
 Route::post('categoria/{categorium}', 'CategoriaController@update');
+Route::get('/produto/delete/{id}','ProdutoController@destroy');
+Route::post('/produto/{categorium}', 'ProdutoController@update');
 
 Route::resource('produto', 'ProdutoController');
 Route::resource('categoria', 'CategoriaController');

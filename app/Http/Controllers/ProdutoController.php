@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \App\Categoria;
+use \App\Produto;
 
 class ProdutoController extends Controller
 {
@@ -13,7 +15,8 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        return view('produtos');
+        $produtos = Produto::all();
+        return view('produtos', compact('produtos'));
     }
 
     /**
@@ -23,7 +26,8 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        
+        $categorias = Categoria::all();
+        return view('novoproduto', compact('categorias'));
     }
 
     /**
@@ -34,7 +38,13 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $prod = new Produto();
+        $prod->nome = $request->input('nome');
+        $prod->estoque = $request->input('qtd');
+        $prod->preco = $request->input('preco');
+        $prod->categoria_id = $request->input('categoria');
+        $prod->save();
+        return redirect('/produto');
     }
 
     /**
@@ -56,7 +66,12 @@ class ProdutoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $prod = Produto::find($id);
+        $categorias = Categoria::all();
+        if(isset($prod))
+            return view('editarproduto', compact('prod','categorias'));
+        
+        return redirect('/produto');
     }
 
     /**
@@ -68,7 +83,13 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $prod = Produto::find($id);
+        $prod->nome = $request->input('nome');
+        $prod->estoque = $request->input('qtd');
+        $prod->preco = $request->input('preco');
+        $prod->categoria_id = $request->input('categoria');
+        $prod->save();
+        return redirect('/produto');
     }
 
     /**
@@ -79,6 +100,9 @@ class ProdutoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prod = Produto::find($id);
+        if(isset($prod))
+            $prod->delete();
+        return redirect('/produto');
     }
 }
